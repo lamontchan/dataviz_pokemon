@@ -8,9 +8,37 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import data_lib
+
+
+'''
+scatter plot of pokemon by attack vs defense
+'''
+def attack_defense_scatter(df):
+    f1 = df.plot.scatter(x='attack', y='defense', title='Pokemon Attack vs. Defense')
+    f1.set(xlabel='Attack',ylabel='Defense')
+    plt.show()
+
+'''
+scatter plot of pokemon by attack vs defense with sprites
+'''
+def attack_defense_scatter_sprites(df):
+    # plot with sprites
+    fig, ax = plt.subplots()
+
+    #for x, y, image_path in zip(df['attack'], df['defense'], df['sprite']):
+    for x, y, image_path in zip(df['attack'], df['defense'], df['sprite']):
+        data_lib.imscatter(x, y, image_path, zoom=0.5, ax=ax)
+        ax.scatter(x, y)
+
+    plt.title('Pokemon Attack vs. Defense', fontsize=20)
+    plt.xlabel("Attack", fontsize=20)
+    plt.ylabel("Defense", fontsize=20)
+    plt.show()
+
 if __name__ == "__main__":
 
-    csv = 'data/pokemon.csv'
+    csv = 'data/pokemon_complete.csv'
 
     # read csv
     print "[%s] read csv start" % (datetime.now())
@@ -23,11 +51,10 @@ if __name__ == "__main__":
     print "columns:\n%s" % list(df.columns.values)
     print "length: %s" % len(df)
 
-    # plot test
-    print "[%s] plot start" % (datetime.now())
-    f1 = df.plot.scatter(x='attack', y='defense', title='Pokemon Attack vs. Defense Scatter')
-    f1.set(xlabel='Attack',ylabel='Defense')
-    plt.show()
+    # plot attack & defense
+    print "[%s] plot finish" % (datetime.now())
+    attack_defense_scatter(df)
+    attack_defense_scatter_sprites(df)
     print "[%s] plot done" % (datetime.now())
 
     # check legendary
