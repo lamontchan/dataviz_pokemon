@@ -31,7 +31,7 @@ def download_image(name):
             r_sm = requests.get(url_sm)
             if r_sm.status_code == 200:
                 with open(img, 'wb') as f:
-                    f.write(r.content)
+                    f.write(r_sm.content)
             else:
                 print "could not download image from %s or %s. Error: %s" % (url, url_sm, r.status_code)
                 return 1
@@ -81,6 +81,7 @@ if __name__ == "__main__":
                         'type-null',
                         'minior-core',
                         'mr-mime',
+                        'mime-jr',
                         'tapu-koko',
                         'tapu-lele',
                         'tapu-bulu',
