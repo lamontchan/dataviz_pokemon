@@ -11,6 +11,8 @@ Inspiration: [Reddit September 2018 DataVisualization Contest](https://www.reddi
 Data Source: [Kaggle Dataset](https://www.kaggle.com/rounakbanik/pokemon)
 
 Future tasks:
+Normalize Stats
+Focus on Higher Attack/SpAttack (most competitive use the higher stat)
 Standard Deviation by Generation
  - high std may reveal higher number of competitive pokemon
 Power Creep Filtering
