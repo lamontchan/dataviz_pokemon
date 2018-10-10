@@ -15,8 +15,8 @@ import data_lib
 scatter plot of pokemon by attack vs defense
 '''
 def attack_defense_scatter(df):
-    f1 = df.plot.scatter(x='attack', y='defense', title='Pokemon Attack vs. Defense')
-    f1.set(xlabel='Attack',ylabel='Defense')
+    fig = df.plot.scatter(x='attack', y='defense', title='Pokemon Attack vs. Defense')
+    fig.set(xlabel='Attack',ylabel='Defense')
     plt.show()
 
 '''
@@ -36,6 +36,36 @@ def attack_defense_scatter_sprites(df):
     plt.ylabel("Defense", fontsize=20)
     plt.show()
 
+def avg_stats_by_generation(df):
+    df_tot = df.groupby('generation')
+    df_mean = df_tot.agg(np.mean)
+
+    df = df[['generation', 'attack','defense','sp_attack','sp_defense','hp','speed']]
+    fig = df_mean.plot.bar(y=['attack','defense','sp_attack','sp_defense','hp','speed'],stacked=True,title='Average Pokemon Statistics by Generation')
+    fig.set(xlabel='Pokemon Generation',ylabel='Statistics')
+    plt.show()
+
+
+def show_gen1_legendary_stats(df):
+
+    # get first gen legendaries
+    df = df.loc[df['is_legendary'] == 1]
+    df = df.loc[df['generation'] == 1]
+
+    # gen 1
+    df = df[['name','attack','defense']]
+    df.set_index('name', inplace=True)
+
+    fig = df.plot.bar(rot=0, stacked=True, title='1st Generation Legendary Pokemon Stats')
+    fig.set(xlabel='Legendary Pokemon',ylabel='Stats')
+    plt.show()
+
+def plot_stat_distribution(df):
+    df['total_stats'] = df['attack'] + df['defense'] + df['sp_attack'] + df['sp_defense'] + df['hp'] + df['speed']
+    fig = df['total_stats'].plot.hist(title='Statistic Distribution of Pokemon', bins=10)
+    fig.set(xlabel='Total Statistics',ylabel='Number of Pokemon')
+    plt.show()
+
 if __name__ == "__main__":
 
     csv = 'data/pokemon_complete.csv'
@@ -52,44 +82,25 @@ if __name__ == "__main__":
     print "length: %s" % len(df)
 
     # plot attack & defense
-    print "[%s] plot finish" % (datetime.now())
+    print "[%s] attack/defense scatter start" % (datetime.now())
     attack_defense_scatter(df)
     attack_defense_scatter_sprites(df)
-    print "[%s] plot done" % (datetime.now())
+    print "[%s] attack/defense scatter done" % (datetime.now())
 
     # check legendary
-    print "[%s] legendary" % (datetime.now())
-    lf = df.loc[df['is_legendary'] == 1]
-    print "head\n%s" % lf.head()
-    print "length: %s" % len(lf)
-
-    print "[%s] first gen" % (datetime.now())
-    lf1 = lf.loc[df['generation'] == 1]
-
-    # gen 1
-    print "[%s] gen1" % (datetime.now())
-    print "head\n%s" % lf1.head()
-    lf1 = lf1[['name','attack','defense']]
-    lf1.set_index('name', inplace=True)
-    print "length: %s" % len(lf1)
-
-    f2 = lf1.plot.bar(rot=0, stacked=True, title='1st Generation Legendary Pokemon Stats')
-    f2.set(xlabel='Legendary Pokemon',ylabel='Stats')
-    plt.show()
+    print "[%s] gen1 legendary start" % (datetime.now())
+    show_gen1_legendary_stats(df)
+    print "[%s] gen1 legendary done" % (datetime.now())
 
     # power creep check
-    print "[%s] power creep" % (datetime.now())
-    df_tot = df.groupby('generation')
-    df_mean = df_tot.agg(np.mean)
+    print "[%s] average pokemon statistics by generation start" % (datetime.now())
+    avg_stats_by_generation(df)
+    print "[%s] average pokemon statistics by generation end" % (datetime.now())
 
-    print "head\n%s" % df_mean.head
-
-    df = df[['generation', 'attack','defense','sp_attack','sp_defense','hp','speed']]
-    f3 = df_mean.plot.bar(y=['attack','defense','sp_attack','sp_defense','hp','speed'],stacked=True,title='Average Pokemon Statistics by Generation')
-    f3.set(xlabel='Pokemon Generation',ylabel='Statistics')
-    plt.show()
-
-
+    # distribution
+    print "[%s] plot statistics distribution start" % (datetime.now())
+    plot_stat_distribution(df)
+    print "[%s] plot statistics distribution end" % (datetime.now())
 
 
 
