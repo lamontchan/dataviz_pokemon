@@ -12,28 +12,28 @@ import data_lib
 
 
 '''
-scatter plot of pokemon by attack vs defense
+scatter plot with given x,y data
 '''
-def attack_defense_scatter(df):
-    fig = df.plot.scatter(x='attack', y='defense', title='Pokemon Attack vs. Defense')
-    fig.set(xlabel='Attack',ylabel='Defense')
+def scatter_plot(df, x_data, y_data, x_label, y_label, title):
+    fig = df.plot.scatter(x=x_data, y=y_data, title=title)
+    fig.set(xlabel=x_label,ylabel=y_label)
     plt.show()
 
 '''
-scatter plot of pokemon by attack vs defense with sprites
+scatter plot of given x,y data with pokemon sprites
 '''
-def attack_defense_scatter_sprites(df):
+def scatter_plot_sprites(df, x_data, y_data, x_label, y_label, title):
     # plot with sprites
     fig, ax = plt.subplots()
 
     #for x, y, image_path in zip(df['attack'], df['defense'], df['sprite']):
-    for x, y, image_path in zip(df['attack'], df['defense'], df['sprite']):
+    for x, y, image_path in zip(df[x_data], df[y_data], df['sprite']):
         data_lib.imscatter(x, y, image_path, zoom=0.5, ax=ax)
         ax.scatter(x, y)
 
-    plt.title('Pokemon Attack vs. Defense', fontsize=20)
-    plt.xlabel("Attack", fontsize=20)
-    plt.ylabel("Defense", fontsize=20)
+    plt.title(title, fontsize=20)
+    plt.xlabel(x_label, fontsize=20)
+    plt.ylabel(y_label, fontsize=20)
     plt.show()
 
 def avg_stats_by_generation(df):
@@ -83,9 +83,14 @@ if __name__ == "__main__":
 
     # plot attack & defense
     print "[%s] attack/defense scatter start" % (datetime.now())
-    attack_defense_scatter(df)
-    attack_defense_scatter_sprites(df)
+    scatter_plot(df, 'attack', 'defense', 'Attack', 'Defense', 'Pokemon Attack vs. Defense')
+    scatter_plot_sprites(df, 'attack', 'defense', 'Attack', 'Defense', 'Pokemon Attack vs. Defense')
     print "[%s] attack/defense scatter done" % (datetime.now())
+
+    # plot sp attack & sp defense
+    print "[%s] sp.attack/sp.defense scatter start" % (datetime.now())
+    scatter_plot_sprites(df, 'sp_attack', 'sp_defense', 'Special Attack', 'Special Defense', 'Pokemon Sp. Attack vs. Sp. Defense')
+    print "[%s] sp.attack/sp.defense scatter done" % (datetime.now())
 
     # check legendary
     print "[%s] gen1 legendary start" % (datetime.now())
