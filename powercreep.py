@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     # plot sp attack & sp defense
     print "[%s] sp.attack/sp.defense scatter start" % (datetime.now())
-    scatter_plot_sprites(df, 'sp_attack', 'sp_defense', 'Special Attack', 'Special Defense', 'Pokemon Sp. Attack vs. Sp. Defense')
+    scatter_plot_sprites(df.loc[df['is_fully_evolved'] == 1], 'sp_attack', 'sp_defense', 'Special Attack', 'Special Defense', 'Pokemon Sp. Attack vs. Sp. Defense')
     print "[%s] sp.attack/sp.defense scatter done" % (datetime.now())
 
     # check legendary
@@ -100,11 +100,13 @@ if __name__ == "__main__":
     # power creep check
     print "[%s] average pokemon statistics by generation start" % (datetime.now())
     avg_stats_by_generation(df)
+    avg_stats_by_generation(df.loc[df['is_fully_evolved'] == 1])
     print "[%s] average pokemon statistics by generation end" % (datetime.now())
 
     # distribution
     print "[%s] plot statistics distribution start" % (datetime.now())
     plot_stat_distribution(df)
+    plot_stat_distribution(df.loc[df['is_fully_evolved'] == 1])
     print "[%s] plot statistics distribution end" % (datetime.now())
 
 
