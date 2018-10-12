@@ -61,10 +61,35 @@ def show_gen1_legendary_stats(df):
     plt.show()
 
 def plot_stat_distribution(df):
-    df['total_stats'] = df['attack'] + df['defense'] + df['sp_attack'] + df['sp_defense'] + df['hp'] + df['speed']
     fig = df['total_stats'].plot.hist(title='Statistic Distribution of Pokemon', bins=10)
     fig.set(xlabel='Total Statistics',ylabel='Number of Pokemon')
     plt.show()
+
+def normalize_stats(df):
+    df = normalize_column(df, 'attack')
+    df = normalize_column(df, 'sp_attack')
+    df = normalize_column(df, 'max_attack')
+    df = normalize_column(df, 'defense')
+    df = normalize_column(df, 'sp_defense')
+    df = normalize_column(df, 'hp')
+    df = normalize_column(df, 'speed')
+    df = normalize_column(df, 'total_stats')
+    return df
+
+def normalize_column(df,column):
+    df[column]=((df[column]-df[column].min())/(df[column].max()-df[column].min()))
+    #print df.head()
+    return df
+
+'''
+add max_attack as attack/sp_attack value; whichever is higher
+    - pokemon most likely uses higher stat for attacking for more effectiveness
+'''
+def add_data(df):
+    df['max_attack'] = df[['attack','sp_attack']].max(axis=1)
+    df['total_stats'] = df['attack'] + df['defense'] + df['sp_attack'] + df['sp_defense'] + df['hp'] + df['speed']
+    print df[['name','attack','sp_attack','max_attack','total_stats']].head()
+    return df
 
 if __name__ == "__main__":
 
@@ -80,6 +105,14 @@ if __name__ == "__main__":
     print "head:\n%s" % df.head()
     print "columns:\n%s" % list(df.columns.values)
     print "length: %s" % len(df)
+
+    # check max attack/sp.attack
+    print "[%s] add data to df start" % (datetime.now())
+    df = add_data(df)
+    print "[%s] add data to df end" % (datetime.now())
+
+    # normalize data
+    df = normalize_stats(df)
 
     # plot attack & defense
     print "[%s] attack/defense scatter start" % (datetime.now())
@@ -105,10 +138,12 @@ if __name__ == "__main__":
 
     # distribution
     print "[%s] plot statistics distribution start" % (datetime.now())
-    plot_stat_distribution(df)
-    plot_stat_distribution(df.loc[df['is_fully_evolved'] == 1])
+    for i in range(1,7):
+        plot_stat_distribution(df.loc[(df['is_fully_evolved'] == 1) & (df['generation'] == i)])
+        print df[['name','total_stats']].loc[(df['is_fully_evolved'] == 1) & (df['generation'] == i)].sort_values(by='total_stats',ascending=False).head()
+    #plot_stat_distribution(df.loc[df['is_fully_evolved'] == 1])
+    #plot_stat_distribution(df)
     print "[%s] plot statistics distribution end" % (datetime.now())
-
 
 
 
