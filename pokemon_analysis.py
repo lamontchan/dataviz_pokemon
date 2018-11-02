@@ -26,7 +26,6 @@ def scatter_plot_sprites(df, x_data, y_data, x_label, y_label, title):
     # plot with sprites
     fig, ax = plt.subplots()
 
-    #for x, y, image_path in zip(df['attack'], df['defense'], df['sprite']):
     for x, y, image_path in zip(df[x_data], df[y_data], df['sprite']):
         data_lib.imscatter(x, y, image_path, zoom=0.5, ax=ax)
         ax.scatter(x, y)
@@ -60,8 +59,8 @@ def show_gen1_legendary_stats(df):
     fig.set(xlabel='Legendary Pokemon',ylabel='Stats')
     plt.show()
 
-def plot_stat_distribution(df):
-    fig = df['total_stats'].plot.hist(title='Statistic Distribution of Pokemon', bins=10)
+def plot_stat_distribution(df, title):
+    fig = df['total_stats'].plot.hist(title=title, bins=10)
     fig.set(xlabel='Total Statistics',ylabel='Number of Pokemon')
     plt.show()
 
@@ -139,10 +138,8 @@ if __name__ == "__main__":
     # distribution
     print "[%s] plot statistics distribution start" % (datetime.now())
     for i in range(1,7):
-        plot_stat_distribution(df.loc[(df['is_fully_evolved'] == 1) & (df['generation'] == i)])
+        plot_stat_distribution(df.loc[(df['is_fully_evolved'] == 1) & (df['generation'] == i)], 'Statistic Distribution of Pokemon - Generation %s' % (i))
         print df[['name','total_stats']].loc[(df['is_fully_evolved'] == 1) & (df['generation'] == i)].sort_values(by='total_stats',ascending=False).head()
-    #plot_stat_distribution(df.loc[df['is_fully_evolved'] == 1])
-    #plot_stat_distribution(df)
     print "[%s] plot statistics distribution end" % (datetime.now())
 
 
